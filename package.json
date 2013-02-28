@@ -4,6 +4,7 @@
 	"version": "1.0.0",
 	"author": "Tyler Johnson <tyler@vintyge.com>",
 	"description": "A simple command line interface for installing and compiling Twitter Bootstrap.",
+	"homepage": "https://github.com/appleifreak/bootstrap-packager-manager",
 	"dependencies": {
 		"commander": "1.1.1",
 		"underscore": "1.4.4",
@@ -19,5 +20,17 @@
 	},
 	"engines": {
 		"node": ">=0.8"
-	}
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/appleifreak/bootstrap-packager-manager.git"
+	},
+	"keywords": [
+		"cli",
+		"twitter",
+		"bootstrap",
+		"compile",
+		"install",
+		"manager"
+	]
 }

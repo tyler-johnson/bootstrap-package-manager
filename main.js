@@ -28,17 +28,14 @@ program
 	.option('-i, --images', 'Add Images')
 	.option('-a, --font-awesome', "Add Font Awesome")
 	.option('--no-concat', "Don't concat Javascript files together. JS compression not available with this option.")
-	.option('-x, --compress', "Compress JS and CSS and include as a \"*.min.*\" file.")
-	.option('--compress-js', "Compress JS with UglifyJs and include as a \"bootstrap.min.js\" file.")
-	.option('--compress-css', "Compress CSS with lessc (YUI) and include as a \"*.min.css\" file.")
+	.option('-x, --compress', "Compress JS and CSS and include as  an extra \"*.min.*\" file.")
+	.option('--compress-js', "Compress JS with UglifyJs and include as  an extra \"bootstrap.min.js\" file.")
+	.option('--compress-css', "Compress CSS with lessc (YUI) and include as an extra \"*.min.css\" file.")
 	.option('--bootstrap-version [version]', "Specific Bootstrap version to use. See http://github.com/twitter/bootstrap/tags for full list.")
 	.option('--font-awesome-version [version]', "Specific Font Awesome version to use. See http://github.com/FortAwesome/Font-Awesome/tags for full list.")
 	
 program.on('--help', function(){
-  console.log('  Examples:');
-  console.log('');
-  console.log('    $ bsp bootstrap');
-  console.log('    $ custom-help -h');
+  console.log('  Note: The default is to include all javascript, css, images and less unless you include at least one of the options `-j`, `-c`, `-l`, or `-i`, in which case only those specified are included.');
   console.log('');
 });
 
