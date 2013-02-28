@@ -1,5 +1,5 @@
 {
-	"name": "bootstrap-packager-manager",
+	"name": "bootstrap-package-manager",
 	"preferGlobal": true,
 	"version": "1.0.0",
 	"author": "Tyler Johnson <tyler@vintyge.com>",
