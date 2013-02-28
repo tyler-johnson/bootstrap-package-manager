@@ -3,7 +3,7 @@
 	"preferGlobal": true,
 	"version": "1.0.0",
 	"author": "Tyler Johnson <tyler@vintyge.com>",
-	"description": "A simple Twitter Bootstrap command line packager compiler.",
+	"description": "A simple command line interface for installing and compiling Twitter Bootstrap.",
 	"dependencies": {
 		"commander": "1.1.1",
 		"underscore": "1.4.4",
