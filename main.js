@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 var time = new Date(),
 	program = require('commander'),
 	_ = require('underscore'),
@@ -185,7 +187,7 @@ promise.start(function() {
 	console.log('Downloading Bootstrap...');
 	
 	download_package(boot_url, {
-		dest: folder,
+		dest: location,
 		start: function(res) {
 			if (res.statusCode >= 400 && res.statusCode < 600) throw new Error("Bootstrap "+program.bootstrapVersion+" could not be found.");
 
@@ -201,7 +203,7 @@ promise.start(function() {
 		},
 		complete: function(dest) {
 			console.log('\nInstalling Bootstrap...');
-			new targz().extract(dest, folder, function(err) {
+			new targz().extract(dest, location, function(err) {
 				if (err) throw err;
 				else {
 					fs.unlinkSync(dest); // Delete tar file
@@ -224,7 +226,7 @@ promise.start(function() {
 	_.each(get, function(data, key) {
 		if (program[key] || EVERYTHING) {
 			var src = path.join(boot_dest, data.folder),
-				dest = path.join(folder, data.folder);
+				dest = path.join(location, data.folder);
 
 			// Delete the folder
 			fs.remove(dest, p);
@@ -254,7 +256,7 @@ promise.start(function() {
 		console.log('Downloading Font Awesome...');
 
 		download_package(fa_url, {
-			dest: folder,
+			dest: location,
 			start: function(res) {
 				if (res.statusCode >= 400 && res.statusCode < 600) throw new Error("Font Awesome "+program.fontAwesomeVersion+" could not be found.");
 
@@ -270,7 +272,7 @@ promise.start(function() {
 			},
 			complete: function(dest) {
 				console.log('\nInstalling Font Awesome...');
-				new targz().extract(dest, folder, function(err) {
+				new targz().extract(dest, location, function(err) {
 					if (err) throw err;
 					else {
 						fs.unlinkSync(dest); // Delete tar file
@@ -284,12 +286,12 @@ promise.start(function() {
 		fa_dest = p.get();
 
 		// Copy font folder
-		fs.copy(path.join(fa_dest, "font"), path.join(folder, "font"), p);
+		fs.copy(path.join(fa_dest, "font"), path.join(location, "font"), p);
 		if (err = p.get()) throw err;
 
 		// If less is enabled, copy over the correct file
 		if (program.less || EVERYTHING) {
-			fa_copy_fix(fa_dest, path.join(folder, "less"), p);
+			fa_copy_fix(fa_dest, path.join(location, "less"), p);
 			if (err = p.get()) throw err;
 		}
 
@@ -305,7 +307,7 @@ promise.start(function() {
 		console.log('Compiling CSS...');
 
 		// Create CSS Folder
-		var css_folder = path.join(folder, "css");
+		var css_folder = path.join(location, "css");
 		if (!fs.existsSync(css_folder) || !fs.statSync(css_folder).isDirectory()) fs.mkdirSync(css_folder);
 
 		compile_less(path.join(boot_dest, "less/bootstrap.less"), path.join(css_folder, "bootstrap.css"), false, p);
@@ -327,7 +329,7 @@ promise.start(function() {
 	if ((program.javascript || EVERYTHING) && program.concat) {
 		console.log('Compiling Javascript...');
 
-		var src = path.join(folder, "js"), code,
+		var src = path.join(location, "js"), code,
 			files = fs.readdirSync(src),
 			compress = program.compress || program.compressJs;
 
