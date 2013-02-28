@@ -1,6 +1,6 @@
 # Bootstrap Package Manager
 
-This is a simple command line interface for installing and compiling Twitter Bootstrap written Node.js. It has many options, but the default is to install everything, without compression. It can also automatically include Font-Awesome.
+This is a simple command line interface for installing and compiling Twitter Bootstrap written in Node.js. It has many options, but the default is to install everything, without compression. It can also automatically include Font-Awesome.
 
 ## Install
 
