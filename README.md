@@ -23,8 +23,8 @@ This is a simple command line interface for installing and compiling Twitter Boo
 * `-x, --compress` : Compress JS and CSS and include as an extra "\*.min.\*" file.
 * `--compress-js` : Compress JS with UglifyJs and include as  an extra "bootstrap.min.js" file.
 * `--compress-css` : Compress CSS with lessc (YUI) and include as an extra "\*.min.css" file.
-* `--bootstrap-version [version]` : Specific Bootstrap version to use. See <http://github.com/twitter/bootstrap/tags> for full list. Example: "2.1.0" or "v2.1.0"
-* `--font-awesome-version [version]` : Specific Font Awesome version to use. See <http://github.com/FortAwesome/Font-Awesome/tags> for full list. Example: "2.1.0" or "v2.1.0"
+* `--bootstrap-version <version>` : Specific Bootstrap version to use. See <http://github.com/twitter/bootstrap/tags> for full list. Example: "2.1.0" or "v2.1.0"
+* `--font-awesome-version <version>` : Specific Font Awesome version to use. See <http://github.com/FortAwesome/Font-Awesome/tags> for full list. Example: "2.1.0" or "v2.1.0"
 
 The default is to include all javascript, css, images and less unless you include at least one of the options `-j`, `-c`, `-l`, or `-i`, in which case only those specified are included.
 
