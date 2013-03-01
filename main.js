@@ -249,7 +249,7 @@ promise.start(function() {
 
 			// Copy the new one
 			fs.copy(src, dest, p);
-			if (p.get()) throw new Error("Something went wrong trying to copy the " + data.folder " folder.");
+			if (p.get()) throw new Error("Something went wrong trying to copy the " + data.folder + " folder.");
 
 			// Clean folders
 			var files = fs.readdirSync(dest);
