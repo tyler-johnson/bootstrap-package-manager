@@ -22,7 +22,7 @@ var BOOTSTRAP_URL = "https://github.com/twitter/bootstrap/archive/<%=version%>.t
 
 // Program Stuff
 program
-	.version('1.0.1')
+	.version('1.0.2')
 	.usage('[options] <output>')
 	.option('-j, --javascript', 'Add Javascript')
 	.option('-c, --css', 'Add CSS')
@@ -261,6 +261,10 @@ promise.start(function() {
 			});
 		}
 	});
+
+	// Get the LICENSE file
+	fs.copy(path.join(boot_dest, "LICENSE"), path.join(location, "LICENSE"), p);
+	p.get()
 
 	console.log('');
 	
