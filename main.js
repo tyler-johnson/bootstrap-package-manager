@@ -22,23 +22,25 @@ var BOOTSTRAP_URL = "https://github.com/twitter/bootstrap/archive/<%=version%>.t
 
 // Program Stuff
 program
-	.version('1.0.0')
+	.version('1.0.1')
 	.usage('[options] <output>')
 	.option('-j, --javascript', 'Add Javascript')
 	.option('-c, --css', 'Add CSS')
 	.option('-l, --less', 'Add Less')
 	.option('-i, --images', 'Add Images')
 	.option('-a, --font-awesome', "Add Font Awesome")
-	.option('--no-concat', "Don't concat Javascript files together. JS compression not available with this option.")
 	.option('-x, --compress', "Compress JS and CSS and include as  an extra \"*.min.*\" file.")
+	.option('-v, --variables <path>', "Path to a custom `variables.less` file to replace the included version.")
+	.option('-f, --font-path <path>', "Set a custom value for the less variable `@FontAwesomePath` for a custom css font path when using Font Awesome.")
 	.option('--compress-js', "Compress JS with UglifyJs and include as  an extra \"bootstrap.min.js\" file.")
 	.option('--compress-css', "Compress CSS with lessc (YUI) and include as an extra \"*.min.css\" file.")
+	.option('--no-concat', "Don't concat Javascript files together. JS compression not available with this option.")
 	.option('--bootstrap-version <version>', "Specific Bootstrap version to use. See http://github.com/twitter/bootstrap/tags for full list.")
 	.option('--font-awesome-version <version>', "Specific Font Awesome version to use. See http://github.com/FortAwesome/Font-Awesome/tags for full list.")
 	
 program.on('--help', function(){
-  console.log('  Note: The default is to include all javascript, css, images and less unless you include at least one of the options `-j`, `-c`, `-l`, or `-i`, in which case only those specified are included.');
-  console.log('');
+	console.log('  Note: The default is to include all javascript, css, images and less unless you include at least one of the options `-j`, `-c`, `-l`, or `-i`, in which case only those specified are included.');
+	console.log('');
 });
 
 program.parse(process.argv);
@@ -111,13 +113,17 @@ function fa_copy_fix(folder, dest, cb) {
 	var src = path.join(folder, "less");
 
 	fs.copy(src, dest, function(err) {
-		if (err) cb(err);
-		else {
-			fix_file(path.join(dest, "bootstrap.less"), "sprites.less", "font-awesome.less", function(err) {
-				if (err) cb(err);
-				else cb();
-			});
-		}
+		if (err) throw new Error("Something went wrong trying to copy the font awesome files.")
+		else fix_file(path.join(dest, "bootstrap.less"), "sprites.less", "font-awesome.less", function(err) {
+			if (err) cb(err);
+			else if (program.fontPath) fix_file(path.join(dest, "font-awesome.less"),
+				/@FontAwesomePath(.*?);/i, "@FontAwesomePath: \""+program.fontPath+"\";",
+				function(err) {
+					if (err) cb(err);
+					else cb();
+				});
+			else cb();
+		});
 	});
 }
 
@@ -216,6 +222,15 @@ promise.start(function() {
 	
 	boot_dest = p.get();
 
+	// Replace variables.less
+	if (program.variables) {
+		var src = path.resolve(process.cwd(), program.variables),
+			dest = path.join(boot_dest, "less/variables.less");
+
+		fs.copy(src, dest, p);
+		if (p.get()) throw new Error(program.variables + " couldn't be found.");
+	}
+
 	// Get main packages
 	var get = {
 		"javascript": { folder: "js", ext: ".js" },
@@ -234,7 +249,7 @@ promise.start(function() {
 
 			// Copy the new one
 			fs.copy(src, dest, p);
-			if (err = p.get()) throw err;
+			if (p.get()) throw new Error("Something went wrong trying to copy the " + data.folder " folder.");
 
 			// Clean folders
 			var files = fs.readdirSync(dest);
@@ -287,7 +302,7 @@ promise.start(function() {
 
 		// Copy font folder
 		fs.copy(path.join(fa_dest, "font"), path.join(location, "font"), p);
-		if (err = p.get()) throw err;
+		if (p.get()) throw new Error("Something went wrong trying to copy the font folder.");
 
 		// If less is enabled, copy over the correct file
 		if (program.less || EVERYTHING) {
