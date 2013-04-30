@@ -71,7 +71,7 @@ o["variables.less"] = program.variables or null
 ###
 The Manager
 ###
-BPM = new BootstrapPackageManager "bootstrap", o
+BPM = new BootstrapPackageManager _.first(program.args), o
 
 ###
 The Extras
