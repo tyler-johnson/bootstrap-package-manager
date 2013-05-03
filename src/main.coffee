@@ -161,9 +161,18 @@ class BootstrapPackageManager extends AsyncTasks
 			unless _.contains(@options.parts, "js") and _.contains(@options.concat, "js") then return next()
 			folder = path.join(@dir, "js")
 
+			# Order of files as defined by the Bootstrap Makefile
+			order = [ "transition", "alert", "button", "carousel", "collapse", "dropdown", "modal", "tooltip", "popover", "scrollspy", "tab", "typeahead", "affix" ]
+
 			# Get files
 			fs.readdir folder, (err, files) ->
 				if err then return cb(err)
+
+				truname = /^bootstrap\-([^\.]+)\.js$/i
+				files = _.sortBy files, (f) ->
+					unless m = truname.exec(f) then return 999
+					i = _.indexOf order, m[1]
+					return if i > -1 then i else 999
 				
 				reduce = (memo, file, callback) ->
 					file = path.join folder, file

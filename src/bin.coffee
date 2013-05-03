@@ -17,7 +17,7 @@ Program Stuff
 ###
 
 program
-	.version('1.1.3')
+	.version('1.1.4')
 	.usage('[options] <dir>')
 	
 	.option('-j, --js', 'Add Javascript')
