@@ -47,7 +47,7 @@ o = {};
 o.version = "master";
 
 if (program.bootstrapVersion) {
-  o.version = BOOTSTRAP_VERSION;
+  o.version = program.bootstrapVersion;
 }
 
 if (o.version !== "master" && o.version.substr(0, 1) !== "v") {

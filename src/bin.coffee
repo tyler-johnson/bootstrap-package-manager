@@ -17,7 +17,7 @@ Program Stuff
 ###
 
 program
-	.version('1.1.2')
+	.version('1.1.3')
 	.usage('[options] <dir>')
 	
 	.option('-j, --js', 'Add Javascript')
@@ -52,7 +52,7 @@ o = {}
 
 # Bootstrap Version
 o.version = "master"
-if program.bootstrapVersion then o.version = BOOTSTRAP_VERSION
+if program.bootstrapVersion then o.version = program.bootstrapVersion
 if o.version isnt "master" and o.version.substr(0, 1) isnt "v" then o.version = "v" + o.version
 
 # Parts to Include
