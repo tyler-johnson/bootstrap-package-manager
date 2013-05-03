@@ -17,7 +17,7 @@ Program Stuff
 ###
 
 program
-	.version('1.1.1')
+	.version('1.1.2')
 	.usage('[options] <dir>')
 	
 	.option('-j, --js', 'Add Javascript')
@@ -137,7 +137,7 @@ events =
 		bar.tick amt
 	"fa-download-end": ""
 	"fa-unarchive": "Unpacking Font Awesome...\n"
-	"fa-copy-parts": "Installing Font Awesome..."
+	"fa-copy-fonts": "Installing Font Awesome..."
 
 	# Variables.less
 	"variables-copy": "Copying custom variables.less..."

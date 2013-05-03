@@ -53,25 +53,27 @@ module.exports = (BPM) ->
 		# unarchive
 		new targz().extract archive, @dir, next
 
-	# Move files
-	BPM.on "install", (next) ->
-		@progress.emit "fa-copy-parts"
+	# Move less files into main lib *before* everything is moved
+	BPM.on "download", (next) ->
+		@progress.emit "fa-copy-less"
+		to_folder = path.join(@runtime.lib, "less")
 
-		# copy font folder
-		fs.copy path.join(@runtime.fa_lib, "font"), path.join(@dir, "font"), (err) =>
+		fs.copy path.join(@runtime.fa_lib, "less"), to_folder, (err) =>
 			if err then return next(err)
 
-			# copy less file
-			fs.copy path.join(@runtime.fa_lib, "less"), path.join(@dir, "less"), (err) =>
-				if err then return next(err)
+			async.parallel [
+				(cb) => # fix font-awesome file
+					unless options.path then return cb()
+					utils.fix_file path.join(to_folder, "font-awesome.less"), /@FontAwesomePath(.*?);/i, "@FontAwesomePath: \"#{options.path}\";", cb
+				(cb) => # Compressed
+					utils.fix_file path.join(to_folder, "bootstrap.less"), "sprites.less", "font-awesome.less", cb
+			], next
 
-				async.parallel [
-					(cb) => # fix font-awesome file
-						unless options.path then return cb()
-						utils.fix_file path.join(@dir, "less", "font-awesome.less"), /@FontAwesomePath(.*?);/i, "@FontAwesomePath: \"#{options.path}\";", cb
-					(cb) => # Compressed
-						utils.fix_file path.join(@dir, "less", "bootstrap.less"), "sprites.less", "font-awesome.less", cb
-				], next
+	# Move font files
+	BPM.on "install", (next) ->
+		@progress.emit "fa-copy-fonts"
+
+		fs.copy path.join(@runtime.fa_lib, "font"), path.join(@dir, "font"), next
 
 	# Clean up extra files
 	BPM.on "cleanup", (next) ->
