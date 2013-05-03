@@ -1,4 +1,3 @@
-https = require "https"
 path = require "path"
 fs = require "fs"
 _ = require "underscore"
@@ -11,18 +10,16 @@ module.exports.download_package = (params, options) ->
 		redirect: (res) ->
 		start: (res) ->
 		data: (chunk) ->
-		complete: () ->
+		complete: (dest) ->
 		error: (err) ->
 
+	error = _.once options.error
 	if _.isString(params) then params = url.parse(params)
-	params.method = "GET"
 
-	req = https.request(params)
-	name = null
-	fstream = null
-	dest = null
+	if params.protocol is "https:" then http = require "https"
+	else http = require "http"
 
-	req.on "response", (res) ->
+	req = http.get params, (res) ->
 		# Check for redirect
 		if res.headers.location
 			options.redirect res
@@ -37,17 +34,35 @@ module.exports.download_package = (params, options) ->
 			unless name then name = path.basename(params.pathname)
 			dest = path.resolve process.cwd(), options.dest, name
 
-			res.on "error", options.error
-			res.on "data", options.data
-			res.on "end", () -> options.complete(dest)
-			
 			fstream = fs.createWriteStream dest, { flags: 'w', mode: 0o777 }
+			fstream.on "error", error
+
+			# Data
+			res.on "data", options.data
+			fstream.on "finish", () -> options.complete(dest)
+			
+			# Pipe
 			res.pipe fstream
 
-	req.end()
+	req.on "error", error
 
 module.exports.fix_file = (file, find, replace, cb) ->
 	fs.readFile file, "utf8", (err, data) ->
 		if err then return cb(err)
 		data = data.replace find, replace
 		fs.writeFile file, data, cb
+
+module.exports.split = (str, sep) ->
+	rawParts = str.split sep
+	parts = []
+	i = 0
+	len = rawParts.length
+
+	while i < len
+		part = ""
+		while rawParts[i].slice(-1) is "\\"
+    		part += rawParts[i++].slice(0, -1) + sep  
+    	parts.push part + rawParts[i]
+    	i++
+	
+	return parts

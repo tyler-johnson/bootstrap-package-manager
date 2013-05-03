@@ -12,7 +12,7 @@ utils = require "./utils"
 
 # Major Variables
 BOOTSTRAP_URL = "https://github.com/twitter/bootstrap/archive/<%=version%>.tar.gz"
-BOOTSTRAP_LESS_FILES = [ "bootstrap.less", "responsive.less" ]
+BOOTSTRAP_LESS_FILES = [ { file: "bootstrap.less", saveas: "bootstrap" }, { file: "responsive.less", saveas: "bootstrap-responsive" } ]
 
 class AsyncTasks
 	# Set up a task for an event
@@ -72,6 +72,10 @@ class BootstrapPackageManager extends AsyncTasks
 		@progress = new EventEmitter
 		@runtime = null
 
+		# Hook up primary tasks
+		@init()
+
+	init: () ->
 		# Create the directory
 		@on "setup", (next) ->
 			@progress.emit "folder-setup"
@@ -96,7 +100,7 @@ class BootstrapPackageManager extends AsyncTasks
 						url: url,
 						archive: dest
 					
-					@progress.emit "fa-download-end"
+					@progress.emit "download-end"
 					next()
 				error: next
 
@@ -220,19 +224,20 @@ class BootstrapPackageManager extends AsyncTasks
 			fs.mkdirs css_folder, (err) ->
 				if err then return next(err)
 
-				compile = (filename, callback) ->
-					file = path.join folder, filename
+				compile = (filedata, callback) ->
+					file = path.join folder, filedata.file
 
 					parser = new less.Parser
 						paths: [ folder ],
-						filename: filename
+						filename: filedata.file
 
 					fs.readFile file, (err, data) ->
 						if err then return next(err)
 
 						parser.parse data.toString("utf8"), (err, tree) ->
 							if err then return next(err)
-							base = path.join css_folder, path.basename file, path.extname file
+							saveas = filedata.saveas or path.basename file, path.extname file
+							base = path.join css_folder, saveas
 
 							async.parallel [
 								(cb) -> # Uncompressed

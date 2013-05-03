@@ -21,7 +21,7 @@ task 'build', 'Build source coffee files to javascript.', () ->
 			fs.readFile src, (err, data) ->
 				if err then return callback err
 
-				source = coffee.compile data.toString("utf8"), { filename: path.basename(dest) }
+				source = coffee.compile data.toString("utf8"), { filename: path.basename(dest), bare: on }
 				if basename is "bin" then source = "#!/usr/bin/env node\n\n" + source
 				fs.writeFile dest, source, (err) ->
 					if err then return callback err

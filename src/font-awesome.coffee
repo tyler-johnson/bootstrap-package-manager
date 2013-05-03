@@ -22,7 +22,7 @@ module.exports = (BPM) ->
 		url = _.template FONTAWESOME_URL, { version: options.version }
 		cur = 0
 		len = 0
-
+		
 		utils.download_package url,
 			dest: @dir
 			start: (res) =>
@@ -77,5 +77,5 @@ module.exports = (BPM) ->
 	BPM.on "cleanup", (next) ->
 		@progress.emit "fa-cleanup"
 
-		rm = _.values(_.pick(@runtime, "fa_archive", "fa_lib"))
+		rm = _.values _.pick @runtime, "fa_archive", "fa_lib"
 		async.each rm, fs.remove, next

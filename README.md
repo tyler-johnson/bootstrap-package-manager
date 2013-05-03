@@ -1,6 +1,6 @@
 # Bootstrap Package Manager
 
-This is a simple command line interface for installing and compiling Twitter Bootstrap written in Node.js. It has many options, but the default is to install everything, without compression. It can also automatically include Font-Awesome.
+This is a simple command line interface for installing and compiling Twitter Bootstrap written in Node.js. It has many options, but the default is to install everything, without compression. It can also automatically include Font-Awesome and a custom variables.less file.
 
 ## Install
 
@@ -10,17 +10,18 @@ This is a simple command line interface for installing and compiling Twitter Boo
 
 	bpm [options] <folder>
 
-`options` are optional, but `folder` is required and is the path you want to create bootstrap at. If it already exists and isn't empty, bootstrap-package-manager will warn you. Here are available options:
+Both `options` and `folder` are optional. `folder` is the path you want to dump the bootstrap files in and defaults to `./bootstrap`. If the directory already exists and isn't empty, bootstrap-package-manager will warn you. Here are available options:
 
 * `-h, --help` : output usage information
 * `-V, --version` : output the version number
 * `-j, --javascript` : Add Javascript
 * `-c, --css` : Add CSS
 * `-l, --less` : Add Less
-* `-i, --images` : Add Images
+* `-i, --img` : Add Images
 * `-a, --font-awesome` : Add Font Awesome
 * `-v, --variables <path>` : Path to a custom `variables.less` file to replace the included version.
 * `-f, --font-path <path>` : Set a custom value for the less variable `@FontAwesomePath` for a custom css font path when using Font Awesome.
+* `-s, --script <paths>` : Include javascript files (seperated by commas) with custom runtime instructions. See `src/font-awesome.coffee` or `src/variables.coffee` for examples.
 * `-x, --compress` : Compress JS and CSS and include as an extra `*.min.*` file.
 * `--compress-js` : Compress JS with UglifyJs and include as  an extra `bootstrap.min.js` file.
 * `--compress-css` : Compress CSS with lessc (YUI) and include as an extra `*.min.css` file.
@@ -29,6 +30,8 @@ This is a simple command line interface for installing and compiling Twitter Boo
 * `--font-awesome-version <version>` : Specific Font Awesome version to use. See <http://github.com/FortAwesome/Font-Awesome/tags> for full list. Default: `master`; Example: `3.0.0` or `v3.0.0`
 
 The default is to include all javascript, css, images and less unless you include at least one of the options `-j`, `-c`, `-l`, or `-i`, in which case only those specified are included.
+
+Sometimes, bootstrap-package-manager likes to... fail. This is probably due to a file request or stream failure. If this happens, attempt a few reruns and then if the problem still occurs, submit issue report.
 
 ## Examples
 
