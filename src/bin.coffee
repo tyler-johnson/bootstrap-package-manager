@@ -17,7 +17,7 @@ Program Stuff
 ###
 
 program
-	.version('1.1.4')
+	.version('1.1.5')
 	.usage('[options] <dir>')
 	
 	.option('-j, --js', 'Add Javascript')
@@ -137,7 +137,8 @@ events =
 		bar.tick amt
 	"fa-download-end": ""
 	"fa-unarchive": "Unpacking Font Awesome...\n"
-	"fa-copy-fonts": "Installing Font Awesome..."
+	"fa-copy-less": "Configuring Bootstrap for Font Awesome..."
+	"fa-copy-fonts": "Installing fonts..."
 
 	# Variables.less
 	"variables-copy": "Copying custom variables.less..."
@@ -170,11 +171,15 @@ run = () ->
 			process.exit(0)
 
 # First check if the folder exists and confirm
-fs.exists dest, (exists) ->
+fs.exists dest, (exists) ->							# exists
 	unless exists then run()
-	else fs.stat dest, (err, stat) ->
+	else fs.stat dest, (err, stat) ->				# is directory
 		if err then throw err
 		else unless stat.isDirectory() then run()
-		else program.confirm 'Destination folder already exists. Continue? ', (ok) ->
-			if ok then run()
-			else process.exit(0)
+		else fs.rmdir dest, (err) ->				# isn't empty
+			if err and err.code is "ENOTEMPTY"
+				program.confirm "Destination folder already exists and isn't empty. Continue? ", (ok) ->
+					if ok then run()
+					else process.exit(0)
+			else if err then throw err
+			else run()

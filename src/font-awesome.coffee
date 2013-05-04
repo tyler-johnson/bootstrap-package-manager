@@ -19,6 +19,7 @@ module.exports = (BPM) ->
 
 	# Download Font Awesome
 	BPM.on "download", (next) ->
+		@progress.emit "fa-download-start"
 		url = _.template FONTAWESOME_URL, { version: options.version }
 		cur = 0
 		len = 0
@@ -27,7 +28,6 @@ module.exports = (BPM) ->
 			dest: @dir
 			start: (res) =>
 				len = parseInt res.headers['content-length'], 10
-				@progress.emit "fa-download-start"
 			data: (chunk) =>
 				cur += chunk.length
 				@progress.emit "fa-download", cur / len

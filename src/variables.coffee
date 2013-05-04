@@ -5,10 +5,11 @@ module.exports = (BPM) ->
 	# Variable Path
 	unless file = BPM.options["variables.less"] then return
 	
-	BPM.on "install", (next) ->
+	# Move less files into main lib *before* everything is moved
+	BPM.on "download", (next) ->
 		@progress.emit "variables-copy"
 
 		src = path.resolve process.cwd(), file
-		dest = path.join @dir, "less", "variables.less"
+		dest = path.join @runtime.lib, "less", "variables.less"
 
 		fs.copy src, dest, next

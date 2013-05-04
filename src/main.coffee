@@ -83,6 +83,7 @@ class BootstrapPackageManager extends AsyncTasks
 
 		# Download the tar file
 		@on "download", (next) ->
+			@progress.emit "download-start"
 			url = _.template BOOTSTRAP_URL, { version: @options.version }
 			cur = 0
 			len = 0
@@ -91,7 +92,6 @@ class BootstrapPackageManager extends AsyncTasks
 				dest: @dir
 				start: (res) =>
 					len = parseInt res.headers['content-length'], 10
-					@progress.emit "download-start"
 				data: (chunk) =>
 					cur += chunk.length
 					@progress.emit "download", cur / len
