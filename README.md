@@ -1,6 +1,6 @@
 # Bootstrap Package Manager
 
-This is a simple command line interface for installing and compiling Twitter Bootstrap written in Node.js. It has many options, but the default is to install everything, without compression. It can also automatically include Font-Awesome and a custom variables.less file.
+This is a simple command line interface for installing and compiling Twitter Bootstrap written in Node.js. It has many options, but the default is to install everything, without compression. It also integrates with a few extra Bootstrap resources, including Font-Awesome and Bootswatch themes.
 
 ## Install
 
@@ -19,6 +19,7 @@ Both `options` and `folder` are optional. `folder` is the path you want to dump 
 * `-l, --less` : Add Less
 * `-i, --img` : Add Images
 * `-a, --font-awesome` : Add Font Awesome
+* `-t, --theme <name>` : Mixin in a Bootswatch theme. See <http://bootswatch.com/> for full list. Compatible with custom variables.less file."
 * `-v, --variables <path>` : Path to a custom `variables.less` file to replace the included version.
 * `-f, --font-path <path>` : Set a custom value for the less variable `@FontAwesomePath` for a custom css font path when using Font Awesome.
 * `-s, --script <paths>` : Include javascript files (seperated by commas) with custom runtime instructions. See `src/font-awesome.coffee` or `src/variables.coffee` for examples.

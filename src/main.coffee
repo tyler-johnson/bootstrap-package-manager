@@ -3,7 +3,6 @@ _ = require "underscore"
 async = require "async"
 path = require "path"
 fs = require 'fs-extra'
-request = require 'request'
 EventEmitter = require("events").EventEmitter
 targz = require 'tar.gz'
 UglifyJS = require "uglify-js"

@@ -17,7 +17,7 @@ Program Stuff
 ###
 
 program
-	.version('1.1.5')
+	.version('1.1.6')
 	.usage('[options] <dir>')
 	
 	.option('-j, --js', 'Add Javascript')
@@ -26,6 +26,7 @@ program
 	.option('-i, --img', 'Add Images')
 	.option('-a, --font-awesome', "Add Font Awesome")
 	
+	.option('-t, --theme <name>', "Mixin in a free Bootswatch theme. See http://bootswatch.com/ for full list.")
 	.option('-v, --variables <path>', "Path to a custom `variables.less` file to replace the included version.")
 	.option('-f, --font-path <path>', "Set a custom value for the less variable `@FontAwesomePath` for a custom css font path when using Font Awesome.")
 	.option('-s, --script <paths>', "Include javascript files (seperated by commas) with custom runtime instructions.")
@@ -76,6 +77,9 @@ if program.fontAwesome
 	if program.fontAwesomeVersion then fa.version = program.fontAwesomeVersion
 	if fa.version and fa.version.substr(0, 1) isnt "v" then fa.version = "v" + fa.version
 
+# Bootswatch
+o.theme = program.theme or null
+
 # Variables.less
 o["variables.less"] = program.variables or null
 
@@ -96,7 +100,7 @@ BPM = new BootstrapPackageManager dest, o
 The Extras
 ###
 
-scripts = _.map [ "font-awesome", "variables" ], (f) -> return path.join __dirname, "../lib/", f
+scripts = _.map [ "font-awesome", "bootswatch", "variables" ], (f) -> return path.join __dirname, "../lib/", f
 if program.script then scripts = scripts.concat utils.split program.script, ","
 
 _.each scripts, (f) ->
@@ -139,6 +143,9 @@ events =
 	"fa-unarchive": "Unpacking Font Awesome...\n"
 	"fa-copy-less": "Configuring Bootstrap for Font Awesome..."
 	"fa-copy-fonts": "Installing fonts..."
+
+	# Bootswatch theme
+	"theme-install": "Installing Bootswatch Theme '#{o.theme}'..."
 
 	# Variables.less
 	"variables-copy": "Copying custom variables.less..."

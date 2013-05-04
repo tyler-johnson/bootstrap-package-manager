@@ -1,6 +1,5 @@
 # Dependencies
 _ = require "underscore"
-request = require "request"
 path = require "path"
 fs = require "fs-extra"
 targz = require 'tar.gz'
