@@ -28,7 +28,7 @@ Program Stuff
 */
 
 
-program.version('1.1.6').usage('[options] <dir>').option('-j, --js', 'Add Javascript').option('-c, --css', 'Add CSS').option('-l, --less', 'Add Less').option('-i, --img', 'Add Images').option('-a, --font-awesome', "Add Font Awesome").option('-t, --theme <name>', "Mixin in a free Bootswatch theme. See http://bootswatch.com/ for full list.").option('-v, --variables <path>', "Path to a custom `variables.less` file to replace the included version.").option('-f, --font-path <path>', "Set a custom value for the less variable `@FontAwesomePath` for a custom css font path when using Font Awesome.").option('-s, --script <paths>', "Include javascript files (seperated by commas) with custom runtime instructions.").option('-x, --compress', "Compress JS and CSS and include as  an extra \"*.min.*\" file.").option('--compress-js', "Compress JS with UglifyJs and include as an extra \"*.min.js\" file.").option('--compress-css', "Compress CSS with lessc (YUI) and include as an extra \"*.min.css\" file.").option('--no-concat', "Don't concat Javascript files together.").option('--bootstrap-version <version>', "Specific Bootstrap version to use. See http://github.com/twitter/bootstrap/tags for full list.").option('--font-awesome-version <version>', "Specific Font Awesome version to use. See http://github.com/FortAwesome/Font-Awesome/tags for full list.");
+program.version('1.1.7').usage('[options] <dir>').option('-j, --js', 'Add Javascript').option('-c, --css', 'Add CSS').option('-l, --less', 'Add Less').option('-i, --img', 'Add Images').option('-a, --font-awesome', "Add Font Awesome").option('-t, --theme <name>', "Mixin in a free Bootswatch theme. See http://bootswatch.com/ for full list.").option('-v, --variables <path>', "Path to a custom `variables.less` file to replace the included version.").option('-f, --font-path <path>', "Set a custom value for the less variable `@FontAwesomePath` for a custom css font path when using Font Awesome.").option('-s, --script <paths>', "Include javascript files (seperated by commas) with custom runtime instructions.").option('-x, --compress', "Compress JS and CSS and include as  an extra \"*.min.*\" file.").option('--compress-js', "Compress JS with UglifyJs and include as an extra \"*.min.js\" file.").option('--compress-css', "Compress CSS with lessc (YUI) and include as an extra \"*.min.css\" file.").option('--no-concat', "Don't concat Javascript files together.").option('--bootstrap-version <version>', "Specific Bootstrap version to use. See http://github.com/twitter/bootstrap/tags for full list.");
 
 program.on('--help', function() {
   console.log('  Note: The default is to include all javascript, css, images and less unless you include at least one of the options `-j`, `-c`, `-l`, or `-i`, in which case only those specified are included.');
@@ -84,12 +84,6 @@ if (program.fontAwesome) {
   fa = o["font-awesome"] = {};
   if (program.fontPath) {
     fa.path = program.fontPath;
-  }
-  if (program.fontAwesomeVersion) {
-    fa.version = program.fontAwesomeVersion;
-  }
-  if (fa.version && fa.version.substr(0, 1) !== "v") {
-    fa.version = "v" + fa.version;
   }
 }
 

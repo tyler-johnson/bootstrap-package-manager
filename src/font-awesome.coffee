@@ -55,24 +55,25 @@ module.exports = (BPM) ->
 	# Move less files into main lib *before* everything is moved
 	BPM.on "download", (next) ->
 		@progress.emit "fa-copy-less"
-		to_folder = path.join(@runtime.lib, "less")
+		to_folder = path.join(@runtime.lib, "less/font-awesome")
+		@runtime.folders["less"].whitelist.push "font-awesome"
 
-		fs.copy path.join(@runtime.fa_lib, "less"), to_folder, (err) =>
+		fs.copy path.join(@runtime.fa_lib, "build/assets/font-awesome/less"), to_folder, (err) =>
 			if err then return next(err)
 
 			async.parallel [
-				(cb) => # fix font-awesome file
+				(cb) => # fix font-awesome font path
 					unless options.path then return cb()
-					utils.fix_file path.join(to_folder, "font-awesome.less"), /@FontAwesomePath(.*?);/i, "@FontAwesomePath: \"#{options.path}\";", cb
-				(cb) => # Compressed
-					utils.fix_file path.join(to_folder, "bootstrap.less"), "sprites.less", "font-awesome.less", cb
+					utils.fix_file path.join(to_folder, "variables.less"), /@FontAwesomePath(.*?);/i, "@FontAwesomePath: \"#{options.path}\";", cb
+				(cb) => # fix bootstrap.less
+					utils.fix_file path.resolve(to_folder, "../bootstrap.less"), "sprites.less", "font-awesome/font-awesome.less", cb
 			], next
 
 	# Move font files
 	BPM.on "install", (next) ->
 		@progress.emit "fa-copy-fonts"
 
-		fs.copy path.join(@runtime.fa_lib, "font"), path.join(@dir, "font"), next
+		fs.copy path.join(@runtime.fa_lib, "build/assets/font-awesome/font"), path.join(@dir, "font"), next
 
 	# Clean up extra files
 	BPM.on "cleanup", (next) ->

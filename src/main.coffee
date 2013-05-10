@@ -8,6 +8,7 @@ targz = require 'tar.gz'
 UglifyJS = require "uglify-js"
 less = require 'less'
 utils = require "./utils"
+minimatch = require("minimatch")
 
 # Major Variables
 BOOTSTRAP_URL = "https://github.com/twitter/bootstrap/archive/<%=version%>.tar.gz"
@@ -78,6 +79,15 @@ class BootstrapPackageManager extends AsyncTasks
 		# Create the directory
 		@on "setup", (next) ->
 			@progress.emit "folder-setup"
+			
+			### initial runtime setup ###
+
+			# Folders to move from the bootstrap folder
+			@runtime.folders =
+				js: { folder: "js", whitelist: [ "*.js" ] },
+				img: { folder: "img", whitelist: [ "*.png" ] },
+				less: { folder: "less", whitelist: [ "*.less" ] }
+
 			fs.mkdirs @dir, next # make the main directory
 
 		# Download the tar file
@@ -124,10 +134,7 @@ class BootstrapPackageManager extends AsyncTasks
 		@on "install", (next) ->
 			@progress.emit "copy-parts"
 
-			folders =
-				js: { folder: "js", ext: ".js" },
-				img: { folder: "img", ext: ".png" },
-				less: { folder: "less", ext: ".less" }
+			folders = @runtime.folders
 
 			process = (part, cb) =>
 				unless data = folders[part] then return cb()
@@ -147,8 +154,12 @@ class BootstrapPackageManager extends AsyncTasks
 						fs.readdir dest, (err, files) ->
 							if err then return cb(err)
 							clean = (file, callback) ->
-								unless path.extname(file) isnt data.ext then callback()
+								pass = _.some data.whitelist, (w) ->
+									return minimatch file, w
+								
+								if pass then callback()
 								else fs.remove path.join(dest, file), callback
+							
 							async.each files, clean, cb
 
 			async.each @options.parts, process, next

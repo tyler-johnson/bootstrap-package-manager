@@ -17,7 +17,7 @@ Program Stuff
 ###
 
 program
-	.version('1.1.6')
+	.version('1.1.7')
 	.usage('[options] <dir>')
 	
 	.option('-j, --js', 'Add Javascript')
@@ -37,7 +37,7 @@ program
 	.option('--no-concat', "Don't concat Javascript files together.")
 	
 	.option('--bootstrap-version <version>', "Specific Bootstrap version to use. See http://github.com/twitter/bootstrap/tags for full list.")
-	.option('--font-awesome-version <version>', "Specific Font Awesome version to use. See http://github.com/FortAwesome/Font-Awesome/tags for full list.")
+	#.option('--font-awesome-version <version>', "Specific Font Awesome version to use. See http://github.com/FortAwesome/Font-Awesome/tags for full list.")
 	
 program.on '--help', () ->
 	console.log('  Note: The default is to include all javascript, css, images and less unless you include at least one of the options `-j`, `-c`, `-l`, or `-i`, in which case only those specified are included.')
@@ -74,8 +74,8 @@ if program.concat then o.concat.push "js"
 if program.fontAwesome
 	fa = o["font-awesome"] = {}
 	if program.fontPath then fa.path = program.fontPath
-	if program.fontAwesomeVersion then fa.version = program.fontAwesomeVersion
-	if fa.version and fa.version.substr(0, 1) isnt "v" then fa.version = "v" + fa.version
+	#if program.fontAwesomeVersion then fa.version = program.fontAwesomeVersion
+	#if fa.version and fa.version.substr(0, 1) isnt "v" then fa.version = "v" + fa.version
 
 # Bootswatch
 o.theme = program.theme or null
