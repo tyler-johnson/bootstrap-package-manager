@@ -58,7 +58,7 @@ module.exports = (BPM) ->
 		to_folder = path.join(@runtime.lib, "less/font-awesome")
 		@runtime.folders["less"].whitelist.push "font-awesome"
 
-		fs.copy path.join(@runtime.fa_lib, "build/assets/font-awesome/less"), to_folder, (err) =>
+		fs.copy path.join(@runtime.fa_lib, "less"), to_folder, (err) =>
 			if err then return next(err)
 
 			async.parallel [
@@ -73,7 +73,7 @@ module.exports = (BPM) ->
 	BPM.on "install", (next) ->
 		@progress.emit "fa-copy-fonts"
 
-		fs.copy path.join(@runtime.fa_lib, "build/assets/font-awesome/font"), path.join(@dir, "font"), next
+		fs.copy path.join(@runtime.fa_lib, "font"), path.join(@dir, "font"), next
 
 	# Clean up extra files
 	BPM.on "cleanup", (next) ->
